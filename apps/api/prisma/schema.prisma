@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String   @unique
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ownedItems       Item[]
+  createdGroups    Group[]          @relation("GroupCreator")
+  memberships      GroupMembership[]
+  createdOutfits   Outfit[]         @relation("OutfitCreator")
+  styledOutfits    Outfit[]         @relation("OutfitRecipient")
+  borrowsSent      BorrowRequest[]  @relation("Borrower")
+  borrowsReceived  BorrowRequest[]  @relation("ItemOwner")
+
+  @@map("users")
+}
+
+// ─── Group ───────────────────────────────────────────
+
+model Group {
+  id         String   @id @default(uuid())
+  name       String
+  inviteCode String   @unique @map("invite_code")
+  createdBy  String   @map("created_by")
+  maxMembers Int      @default(20) @map("max_members")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  creator    User              @relation("GroupCreator", fields: [createdBy], references: [id])
+  members    GroupMembership[]
+  itemVisibilities ItemGroupVisibility[]
+
+  @@map("groups")
+}
+
+// ─── Group Membership ────────────────────────────────
+
+enum GroupRole {
+  ADMIN
+  MEMBER
+}
+
+model GroupMembership {
+  userId   String    @map("user_id")
+  groupId  String    @map("group_id")
+  role     GroupRole  @default(MEMBER)
+  joinedAt DateTime  @default(now()) @map("joined_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([userId, groupId])
+  @@map("group_memberships")
+}
+
+// ─── Item ────────────────────────────────────────────
+
+enum ItemCategory {
+  TOP
+  BOTTOM
+  OUTERWEAR
+  SHOES
+  ACCESSORY
+  BAG
+}
+
+enum ItemSeason {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+  ALL_SEASON
+}
+
+enum ItemOccasion {
+  CASUAL
+  FORMAL
+  ATHLETIC
+  GOING_OUT
+}
+
+enum ItemStatus {
+  AVAILABLE
+  LENT
+  UNAVAILABLE
+}
+
+enum ItemVisibility {
+  ALL_GROUPS
+  SPECIFIC_GROUPS
+  PRIVATE
+}
+
+model Item {
+  id         String         @id @default(uuid())
+  ownerId    String         @map("owner_id")
+  imageUrl   String         @map("image_url")
+  category   ItemCategory
+  color      String
+  brand      String?
+  season     ItemSeason
+  occasion   ItemOccasion
+  status     ItemStatus     @default(AVAILABLE)
+  visibility ItemVisibility @default(ALL_GROUPS)
+  isFavorite Boolean        @default(false) @map("is_favorite")
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  owner           User                  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  outfitItems     OutfitItem[]
+  borrowRequests  BorrowRequest[]
+  groupVisibilities ItemGroupVisibility[]
+
+  @@index([ownerId])
+  @@index([category])
+  @@index([status])
+  @@map("items")
+}
+
+// ─── Item Group Visibility (junction table) ──────────
+
+model ItemGroupVisibility {
+  itemId  String @map("item_id")
+  groupId String @map("group_id")
+
+  item  Item  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, groupId])
+  @@map("item_group_visibility")
+}
+
+// ─── Outfit ──────────────────────────────────────────
+
+model Outfit {
+  id        String   @id @default(uuid())
+  createdBy String   @map("created_by")
+  styledFor String   @map("styled_for")
+  note      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  creator User        @relation("OutfitCreator", fields: [createdBy], references: [id])
+  recipient User      @relation("OutfitRecipient", fields: [styledFor], references: [id])
+  items   OutfitItem[]
+
+  @@index([createdBy])
+  @@index([styledFor])
+  @@map("outfits")
+}
+
+model OutfitItem {
+  outfitId String @map("outfit_id")
+  itemId   String @map("item_id")
+
+  outfit Outfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  @@id([outfitId, itemId])
+  @@map("outfit_items")
+}
+
+// ─── Borrow Request ──────────────────────────────────
+
+enum BorrowRequestStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  ACTIVE
+  RETURNED
+}
+
+enum PickupMethod {
+  IN_PERSON
+  DELIVERY
+}
+
+model BorrowRequest {
+  id                String              @id @default(uuid())
+  itemId            String              @map("item_id")
+  borrowerId        String              @map("borrower_id")
+  ownerId           String              @map("owner_id")
+  status            BorrowRequestStatus @default(PENDING)
+  pickupMethod      PickupMethod        @default(IN_PERSON) @map("pickup_method")
+  borrowDurationDays Int                @default(7) @map("borrow_duration_days")
+  requestedAt       DateTime            @default(now()) @map("requested_at")
+  approvedAt        DateTime?           @map("approved_at")
+  returnedAt        DateTime?           @map("returned_at")
+
+  item     Item      @relation(fields: [itemId], references: [id])
+  borrower User      @relation("Borrower", fields: [borrowerId], references: [id])
+  owner    User      @relation("ItemOwner", fields: [ownerId], references: [id])
+  delivery Delivery?
+
+  @@index([borrowerId])
+  @@index([ownerId])
+  @@index([itemId])
+  @@index([status])
+  @@map("borrow_requests")
+}
+
+// ─── Delivery ────────────────────────────────────────
+
+enum DeliveryProvider {
+  UBER
+  DOORDASH
+}
+
+enum DeliveryStatus {
+  PENDING
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+}
+
+model Delivery {
+  id              String           @id @default(uuid())
+  borrowRequestId String           @unique @map("borrow_request_id")
+  provider        DeliveryProvider
+  trackingUrl     String?          @map("tracking_url")
+  status          DeliveryStatus   @default(PENDING)
+  feeCents        Int              @map("fee_cents")
+  createdAt       DateTime         @default(now()) @map("created_at")
+
+  borrowRequest BorrowRequest @relation(fields: [borrowRequestId], references: [id])
+
+  @@map("deliveries")
+}

@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(npx prisma *)",
+      "Bash(npx expo *)",
+      "Bash(npx tsc *)",
+      "Bash(npx jest *)",
+      "Bash(npx eslint *)",
+      "Bash(npx prettier *)",
+      "Bash(git *)",
+      "Bash(mkdir *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(rm -rf node_modules)",
+      "Bash(rm -rf dist)",
+      "Bash(which *)",
+      "Bash(pwd)"
+    ],
+    "deny": []
+  }
+}
