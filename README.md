@@ -1,8 +1,85 @@
-# Closet — La garde-robe sociale
+# Closet — The Social Wardrobe / La garde-robe sociale
+
+[English](#english) · [Français](#français)
+
+---
+
+## English
+
+A mobile-first app for friend groups to share, borrow, and style outfits from each other's wardrobes.
+
+### Quick start
+
+```bash
+# Install dependencies
+npm install
+
+# Set up environment
+cp apps/api/.env.example apps/api/.env
+# Edit .env with your PostgreSQL connection string
+
+# Set up database
+npm run db:generate
+npm run db:migrate
+npm run db:seed
+
+# Run the API
+npm run dev:api
+
+# Run the mobile app (separate terminal)
+npm run dev:mobile
+```
+
+Using Claude Code? Run `/setup`.
+
+### Project structure
+
+```
+thecloset/
+├── apps/
+│   ├── api/           # Express + TypeScript backend
+│   └── mobile/        # React Native (Expo) mobile app
+├── packages/
+│   └── shared/        # Shared types, constants, validation
+└── docs/              # PRD, architecture docs
+```
+
+### Tech stack
+
+- **Mobile**: React Native (Expo) + TypeScript
+- **Backend**: Express + TypeScript
+- **Database**: PostgreSQL + Prisma
+- **State**: Zustand + React Query
+- **Validation**: Zod
+- **CI**: GitHub Actions
+
+### Documentation
+
+- [`docs/PRD.md`](docs/PRD.md) — Product requirements
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — System architecture
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — How to contribute
+- [`CLAUDE.md`](CLAUDE.md) — AI assistant context & code conventions
+
+### Scripts
+
+| Command | Description |
+|---------|------------|
+| `npm run dev:api` | Start API server (dev) |
+| `npm run dev:mobile` | Start Expo mobile app |
+| `npm test` | Run all tests |
+| `npm run lint` | Lint all code |
+| `npm run format` | Format all code |
+| `npm run typecheck` | Type-check all code |
+| `npm run db:migrate` | Run database migrations |
+| `npm run db:seed` | Seed database with test data |
+
+---
+
+## Français
 
 Application mobile pour que des groupes d’amis partagent, empruntent et composent des tenues à partir des garde-robes des uns et des autres.
 
-## Démarrage rapide
+### Démarrage rapide
 
 ```bash
 # Installer les dépendances
@@ -26,7 +103,7 @@ npm run dev:mobile
 
 Vous utilisez Claude Code ? Exécutez simplement `/setup`.
 
-## Structure du projet
+### Structure du projet
 
 ```
 thecloset/
@@ -38,7 +115,7 @@ thecloset/
 └── docs/              # PRD, documentation d’architecture
 ```
 
-## Pile technique
+### Pile technique
 
 - **Mobile** : React Native (Expo) + TypeScript
 - **Backend** : Express + TypeScript
@@ -47,14 +124,14 @@ thecloset/
 - **Validation** : Zod
 - **CI** : GitHub Actions
 
-## Documentation
+### Documentation
 
 - [`docs/PRD.md`](docs/PRD.md) — Cahier des charges produit
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architecture système
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — Guide de contribution
 - [`CLAUDE.md`](CLAUDE.md) — Contexte pour l’assistant IA et conventions de code
 
-## Scripts
+### Scripts
 
 | Commande | Description |
 |---------|------------|
