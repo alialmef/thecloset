@@ -1,5 +1,4 @@
 import prisma from '../lib/prisma';
-import { NotFoundError } from '../lib/errors';
 
 interface FeedItem {
   id: string;

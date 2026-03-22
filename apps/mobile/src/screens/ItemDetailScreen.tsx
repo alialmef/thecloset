@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Alert,
-} from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { NativeStackRouteProp } from '@react-navigation/native-stack';
+import { View, Text, Image, ScrollView, StyleSheet, Alert } from 'react-native';
+import { useRoute, useNavigation, type RouteProp } from '@react-navigation/native';
 import { ClosetsStackParamList } from '../navigation/AppNavigator';
 import { useItem, useCreateBorrowRequest } from '../hooks/use-api';
 import { useAuthStore } from '../store/auth-store';
@@ -16,13 +8,18 @@ import { Button } from '../components/Button';
 import { Avatar } from '../components/Avatar';
 import { StatusBadge, Badge } from '../components/Badge';
 import { LoadingState, ErrorState } from '../components/States';
-import { colors, typography, spacing, radius, shadows } from '../theme';
-import { Item, ITEM_CATEGORIES_DISPLAY, ITEM_SEASONS_DISPLAY, ITEM_OCCASIONS_DISPLAY } from '@closet/shared';
+import { colors, typography, spacing, radius } from '../theme';
+import {
+  Item,
+  ITEM_CATEGORIES_DISPLAY,
+  ITEM_SEASONS_DISPLAY,
+  ITEM_OCCASIONS_DISPLAY,
+} from '@closet/shared';
 
-type Route = NativeStackRouteProp<ClosetsStackParamList, 'ItemDetail'>['route'];
+type ItemDetailRoute = RouteProp<ClosetsStackParamList, 'ItemDetail'>;
 
 export function ItemDetailScreen(): React.JSX.Element {
-  const route = useRoute<Route>();
+  const route = useRoute<ItemDetailRoute>();
   const navigation = useNavigation();
   const { itemId } = route.params as { itemId: string };
   const userId = useAuthStore((s) => s.userId);
@@ -30,7 +27,9 @@ export function ItemDetailScreen(): React.JSX.Element {
   const itemQuery = useItem(itemId);
   const borrowMutation = useCreateBorrowRequest();
 
-  const item = itemQuery.data as (Item & { owner: { id: string; name: string; avatarUrl: string | null } }) | undefined;
+  const item = itemQuery.data as
+    | (Item & { owner: { id: string; name: string; avatarUrl: string | null } })
+    | undefined;
 
   if (itemQuery.isLoading) {
     return <LoadingState />;
@@ -44,41 +43,45 @@ export function ItemDetailScreen(): React.JSX.Element {
   const isAvailable = item.status === 'AVAILABLE';
 
   const handleBorrow = (): void => {
-    Alert.alert(
-      'Request to Borrow',
-      `Ask ${item.owner.name} to borrow this item?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'In Person',
-          onPress: () =>
-            borrowMutation.mutate(
-              { itemId: item.id, pickupMethod: 'IN_PERSON' },
-              {
-                onSuccess: () => {
-                  Alert.alert('Request Sent!', `${item.owner.name} will be notified.`);
-                  navigation.goBack();
-                },
-                onError: (err: Error) => Alert.alert('Error', err.message),
+    Alert.alert('Request to Borrow', `Ask ${item.owner.name} to borrow this item?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'In Person',
+        onPress: () =>
+          borrowMutation.mutate(
+            { itemId: item.id, pickupMethod: 'IN_PERSON' },
+            {
+              onSuccess: () => {
+                Alert.alert('Request Sent!', `${item.owner.name} will be notified.`);
+                navigation.goBack();
               },
-            ),
-        },
-        {
-          text: 'Delivery',
-          onPress: () =>
-            borrowMutation.mutate(
-              { itemId: item.id, pickupMethod: 'DELIVERY' },
-              {
-                onSuccess: () => {
-                  Alert.alert('Request Sent!', `${item.owner.name} will be notified.`);
-                  navigation.goBack();
-                },
-                onError: (err: Error) => Alert.alert('Error', err.message),
+              onError: (error: unknown) =>
+                Alert.alert(
+                  'Error',
+                  error instanceof Error ? error.message : 'Something went wrong',
+                ),
+            },
+          ),
+      },
+      {
+        text: 'Delivery',
+        onPress: () =>
+          borrowMutation.mutate(
+            { itemId: item.id, pickupMethod: 'DELIVERY' },
+            {
+              onSuccess: () => {
+                Alert.alert('Request Sent!', `${item.owner.name} will be notified.`);
+                navigation.goBack();
               },
-            ),
-        },
-      ],
-    );
+              onError: (error: unknown) =>
+                Alert.alert(
+                  'Error',
+                  error instanceof Error ? error.message : 'Something went wrong',
+                ),
+            },
+          ),
+      },
+    ]);
   };
 
   return (

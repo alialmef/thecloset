@@ -4,10 +4,16 @@ import { MAX_GROUP_MEMBERS, INVITE_CODE_LENGTH } from '@closet/shared';
 import crypto from 'crypto';
 
 function generateInviteCode(): string {
-  return crypto.randomBytes(INVITE_CODE_LENGTH / 2).toString('hex').toUpperCase();
+  return crypto
+    .randomBytes(INVITE_CODE_LENGTH / 2)
+    .toString('hex')
+    .toUpperCase();
 }
 
-export async function createGroup(userId: string, name: string): Promise<ReturnType<typeof prisma.group.create>> {
+export async function createGroup(
+  userId: string,
+  name: string,
+): Promise<ReturnType<typeof prisma.group.create>> {
   const inviteCode = generateInviteCode();
 
   const group = await prisma.group.create({
@@ -32,7 +38,10 @@ export async function createGroup(userId: string, name: string): Promise<ReturnT
   return group;
 }
 
-export async function joinGroup(userId: string, inviteCode: string): Promise<ReturnType<typeof prisma.groupMembership.create>> {
+export async function joinGroup(
+  userId: string,
+  inviteCode: string,
+): Promise<ReturnType<typeof prisma.groupMembership.create>> {
   const group = await prisma.group.findUnique({
     where: { inviteCode },
     include: { _count: { select: { members: true } } },
@@ -66,7 +75,10 @@ export async function joinGroup(userId: string, inviteCode: string): Promise<Ret
   });
 }
 
-export async function getGroupById(groupId: string, userId: string): Promise<ReturnType<typeof prisma.group.findUnique>> {
+export async function getGroupById(
+  groupId: string,
+  userId: string,
+): Promise<ReturnType<typeof prisma.group.findUnique>> {
   const membership = await prisma.groupMembership.findUnique({
     where: { userId_groupId: { userId, groupId } },
   });
@@ -85,7 +97,9 @@ export async function getGroupById(groupId: string, userId: string): Promise<Ret
   });
 }
 
-export async function getUserGroups(userId: string): Promise<ReturnType<typeof prisma.group.findMany>> {
+export async function getUserGroups(
+  userId: string,
+): Promise<ReturnType<typeof prisma.group.findMany>> {
   return prisma.group.findMany({
     where: {
       members: { some: { userId } },

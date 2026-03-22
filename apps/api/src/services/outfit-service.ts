@@ -54,7 +54,9 @@ export async function createOutfit(
   });
 }
 
-export async function getOutfitById(outfitId: string): Promise<ReturnType<typeof prisma.outfit.findUnique>> {
+export async function getOutfitById(
+  outfitId: string,
+): Promise<ReturnType<typeof prisma.outfit.findUnique>> {
   const outfit = await prisma.outfit.findUnique({
     where: { id: outfitId },
     include: {

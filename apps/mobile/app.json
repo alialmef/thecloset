@@ -20,9 +20,6 @@
       },
       "package": "app.closet.mobile"
     },
-    "plugins": [
-      "expo-camera",
-      "expo-image-picker"
-    ]
+    "plugins": ["expo-camera", "expo-image-picker"]
   }
 }

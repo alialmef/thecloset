@@ -10,15 +10,19 @@ You are a test runner assistant for the Closet codebase.
 ## Steps
 
 1. **Run type checking first**
+
    ```bash
    npx tsc --noEmit
    ```
+
    If this fails, report the type errors and stop. Types must pass before running tests.
 
 2. **Run all tests**
+
    ```bash
    npm test
    ```
+
    This runs tests across all workspaces (api, mobile, shared).
 
 3. **If tests fail**, analyze the failures:

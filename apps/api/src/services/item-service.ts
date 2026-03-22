@@ -1,6 +1,13 @@
 import prisma from '../lib/prisma';
 import { NotFoundError, ForbiddenError } from '../lib/errors';
-import { Prisma } from '@prisma/client';
+import {
+  Prisma,
+  ItemCategory,
+  ItemSeason,
+  ItemOccasion,
+  ItemVisibility,
+  ItemStatus,
+} from '@prisma/client';
 
 interface CreateItemData {
   imageUrl: string;
@@ -28,17 +35,19 @@ export async function createItem(
     data: {
       ownerId: userId,
       imageUrl: data.imageUrl,
-      category: data.category as Prisma.EnumItemCategoryFilter['equals'],
+      category: data.category as ItemCategory,
       color: data.color,
       brand: data.brand ?? null,
-      season: data.season as Prisma.EnumItemSeasonFilter['equals'],
-      occasion: data.occasion as Prisma.EnumItemOccasionFilter['equals'],
-      visibility: (data.visibility ?? 'ALL_GROUPS') as Prisma.EnumItemVisibilityFilter['equals'],
+      season: data.season as ItemSeason,
+      occasion: data.occasion as ItemOccasion,
+      visibility: (data.visibility ?? 'ALL_GROUPS') as ItemVisibility,
     },
   });
 }
 
-export async function getItemById(itemId: string): Promise<ReturnType<typeof prisma.item.findUnique>> {
+export async function getItemById(
+  itemId: string,
+): Promise<ReturnType<typeof prisma.item.findUnique>> {
   const item = await prisma.item.findUnique({
     where: { id: itemId },
     include: {
@@ -61,9 +70,13 @@ export async function getUserItems(
 ): Promise<{ items: Awaited<ReturnType<typeof prisma.item.findMany>>; total: number }> {
   const where: Prisma.ItemWhereInput = {
     ownerId: userId,
-    ...(filters.category && { category: filters.category as Prisma.EnumItemCategoryFilter['equals'] }),
+    ...(filters.category && {
+      category: filters.category as Prisma.EnumItemCategoryFilter['equals'],
+    }),
     ...(filters.season && { season: filters.season as Prisma.EnumItemSeasonFilter['equals'] }),
-    ...(filters.occasion && { occasion: filters.occasion as Prisma.EnumItemOccasionFilter['equals'] }),
+    ...(filters.occasion && {
+      occasion: filters.occasion as Prisma.EnumItemOccasionFilter['equals'],
+    }),
     ...(filters.status && { status: filters.status as Prisma.EnumItemStatusFilter['equals'] }),
     ...(filters.color && { color: { contains: filters.color, mode: 'insensitive' } }),
   };
@@ -96,9 +109,20 @@ export async function updateItem(
     throw new ForbiddenError('You can only edit your own items');
   }
 
+  const updateData: Prisma.ItemUpdateInput = {};
+  if (data.imageUrl !== undefined) updateData.imageUrl = data.imageUrl;
+  if (data.color !== undefined) updateData.color = data.color;
+  if (data.brand !== undefined) updateData.brand = data.brand;
+  if (data.category !== undefined) updateData.category = data.category as ItemCategory;
+  if (data.season !== undefined) updateData.season = data.season as ItemSeason;
+  if (data.occasion !== undefined) updateData.occasion = data.occasion as ItemOccasion;
+  if (data.visibility !== undefined) updateData.visibility = data.visibility as ItemVisibility;
+  if (data.status !== undefined) updateData.status = data.status as ItemStatus;
+  if (data.isFavorite !== undefined) updateData.isFavorite = data.isFavorite;
+
   return prisma.item.update({
     where: { id: itemId },
-    data,
+    data: updateData,
   });
 }
 

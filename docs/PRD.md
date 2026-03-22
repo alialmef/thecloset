@@ -2,12 +2,12 @@
 
 **The Social Wardrobe**
 
-| | |
-|---|---|
-| Author | Ali |
-| Version | 1.0 — MVP |
-| Date | March 2026 |
-| Status | Draft |
+|         |            |
+| ------- | ---------- |
+| Author  | Ali        |
+| Version | 1.0 — MVP  |
+| Date    | March 2026 |
+| Status  | Draft      |
 
 ---
 
@@ -35,13 +35,13 @@ Think of it as a group closet that lives on your phone.
 
 ### 2.1 Primary Persona
 
-| Attribute | Detail |
-|---|---|
-| Age | 18–30 |
-| Location | Dense urban areas (NYC, LA, London, etc.) |
-| Social behavior | Active friend group of 5–20 people; hangs out regularly; already shares or borrows clothes informally |
-| Fashion relationship | Cares about style but not obsessed with luxury; values variety and expression over ownership |
-| Pain point | Owns too many clothes, still feels like they have nothing to wear. Wants fresh fits without buying more. |
+| Attribute            | Detail                                                                                                   |
+| -------------------- | -------------------------------------------------------------------------------------------------------- |
+| Age                  | 18–30                                                                                                    |
+| Location             | Dense urban areas (NYC, LA, London, etc.)                                                                |
+| Social behavior      | Active friend group of 5–20 people; hangs out regularly; already shares or borrows clothes informally    |
+| Fashion relationship | Cares about style but not obsessed with luxury; values variety and expression over ownership             |
+| Pain point           | Owns too many clothes, still feels like they have nothing to wear. Wants fresh fits without buying more. |
 
 ### 2.2 Why Close Friends, Not Public
 
@@ -56,12 +56,12 @@ Think of it as a group closet that lives on your phone.
 
 Closet is a mobile-first app (iOS priority, Android fast-follow) built around four core capabilities:
 
-| # | Capability | What It Does |
-|---|---|---|
-| 1 | Upload | Digitize your wardrobe with flexible upload methods (photo dump, single snap, mirror selfie extraction). AI auto-tags category, color, brand, season. |
-| 2 | Style | Browse a friend's closet and put together outfits for them. Combine pieces from multiple closets into cross-closet outfits. |
-| 3 | Trade | Request to borrow any item. Owner approves, you pick up or get it delivered. Built-in tracking of who has what and for how long. |
-| 4 | Social | Feed of outfits styled by friends, reactions, fit checks, and outfit challenges within your group. |
+| #   | Capability | What It Does                                                                                                                                          |
+| --- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Upload     | Digitize your wardrobe with flexible upload methods (photo dump, single snap, mirror selfie extraction). AI auto-tags category, color, brand, season. |
+| 2   | Style      | Browse a friend's closet and put together outfits for them. Combine pieces from multiple closets into cross-closet outfits.                           |
+| 3   | Trade      | Request to borrow any item. Owner approves, you pick up or get it delivered. Built-in tracking of who has what and for how long.                      |
+| 4   | Social     | Feed of outfits styled by friends, reactions, fit checks, and outfit challenges within your group.                                                    |
 
 ---
 
@@ -164,13 +164,13 @@ Most exchanges should happen organically. The app facilitates by showing mutual 
 
 For same-city friends who can't meet up, delivery is available via courier API integration.
 
-| Detail | Spec |
-|---|---|
-| Provider | Uber Direct API or DoorDash Drive API (whichever has better coverage per market) |
-| Who pays | Borrower pays delivery fee. Displayed upfront before confirming request. |
-| Packaging | Courier picks up from owner's door. Owner bags item in any bag/container. |
-| Return delivery | Borrower can request return pickup at end of borrow period (same courier API). |
-| Range | Same city. Max radius configurable per market (default: 10 miles). |
+| Detail          | Spec                                                                             |
+| --------------- | -------------------------------------------------------------------------------- |
+| Provider        | Uber Direct API or DoorDash Drive API (whichever has better coverage per market) |
+| Who pays        | Borrower pays delivery fee. Displayed upfront before confirming request.         |
+| Packaging       | Courier picks up from owner's door. Owner bags item in any bag/container.        |
+| Return delivery | Borrower can request return pickup at end of borrow period (same courier API).   |
+| Range           | Same city. Max radius configurable per market (default: 10 miles).               |
 
 ---
 
@@ -190,29 +190,29 @@ No deposits or money between friends in v1. The social pressure of a small group
 
 ## 9. Information Architecture
 
-| Tab | Purpose |
-|---|---|
-| Home | Feed of recent outfits, fit checks, and activity from your groups |
-| Closets | Browse your closet and friends' closets. Entry point for styling. |
-| Style | Outfit builder canvas. Select a friend (or yourself), drag pieces, save outfits. |
-| Activity | Borrow requests (incoming/outgoing), return reminders, outfit reactions. |
-| Profile | Your closet stats, saved fits, borrow history, group management, settings. |
+| Tab      | Purpose                                                                          |
+| -------- | -------------------------------------------------------------------------------- |
+| Home     | Feed of recent outfits, fit checks, and activity from your groups                |
+| Closets  | Browse your closet and friends' closets. Entry point for styling.                |
+| Style    | Outfit builder canvas. Select a friend (or yourself), drag pieces, save outfits. |
+| Activity | Borrow requests (incoming/outgoing), return reminders, outfit reactions.         |
+| Profile  | Your closet stats, saved fits, borrow history, group management, settings.       |
 
 ---
 
 ## 10. Technical Architecture
 
-| Layer | Stack |
-|---|---|
-| Mobile client | React Native (iOS + Android from single codebase) |
-| Backend | Node.js / Express or Next.js API routes |
-| Database | PostgreSQL (users, groups, items, outfits, borrow records) |
-| Image storage | AWS S3 / Cloudflare R2 with CDN |
-| AI services | Vision API for auto-tagging (GPT-4o or Claude vision); background removal API |
-| Delivery | Uber Direct API / DoorDash Drive API |
-| Auth | Phone OTP + Apple/Google SSO |
-| Notifications | Firebase Cloud Messaging (FCM) + APNs |
-| Real-time | WebSockets for in-app messaging and live status updates |
+| Layer         | Stack                                                                         |
+| ------------- | ----------------------------------------------------------------------------- |
+| Mobile client | React Native (iOS + Android from single codebase)                             |
+| Backend       | Node.js / Express or Next.js API routes                                       |
+| Database      | PostgreSQL (users, groups, items, outfits, borrow records)                    |
+| Image storage | AWS S3 / Cloudflare R2 with CDN                                               |
+| AI services   | Vision API for auto-tagging (GPT-4o or Claude vision); background removal API |
+| Delivery      | Uber Direct API / DoorDash Drive API                                          |
+| Auth          | Phone OTP + Apple/Google SSO                                                  |
+| Notifications | Firebase Cloud Messaging (FCM) + APNs                                         |
+| Real-time     | WebSockets for in-app messaging and live status updates                       |
 
 ---
 
@@ -311,13 +311,13 @@ No ads. No selling user closet data. Trust is the product.
 
 ## 15. Risks & Mitigations
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| Onboarding friction (uploading is tedious) | Users abandon before reaching activation threshold | Bulk upload + AI tagging minimize effort. "Start with 10" guided flow. Gamify with progress bar. |
-| Friends don't return items | Trust erodes, users stop sharing | Return reminders, nudge system, borrow history visibility. Social pressure in small groups is strong. |
-| Group doesn't reach critical mass | Empty closets = no value, no retention | Require 3+ members to activate group. Prompt users to invite during onboarding. Show value preview with demo closets. |
-| Delivery costs make it feel less "free" | Users default to never using delivery | In-person is the default and primary mode. Delivery is an option, not the expectation. Transparent pricing. |
-| Damage or loss of items | Bad experiences kill word of mouth | v1: social trust + small groups. v2: photo-on-return flow, optional item valuation, group-level resolution. |
+| Risk                                       | Impact                                             | Mitigation                                                                                                            |
+| ------------------------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Onboarding friction (uploading is tedious) | Users abandon before reaching activation threshold | Bulk upload + AI tagging minimize effort. "Start with 10" guided flow. Gamify with progress bar.                      |
+| Friends don't return items                 | Trust erodes, users stop sharing                   | Return reminders, nudge system, borrow history visibility. Social pressure in small groups is strong.                 |
+| Group doesn't reach critical mass          | Empty closets = no value, no retention             | Require 3+ members to activate group. Prompt users to invite during onboarding. Show value preview with demo closets. |
+| Delivery costs make it feel less "free"    | Users default to never using delivery              | In-person is the default and primary mode. Delivery is an option, not the expectation. Transparent pricing.           |
+| Damage or loss of items                    | Bad experiences kill word of mouth                 | v1: social trust + small groups. v2: photo-on-return flow, optional item valuation, group-level resolution.           |
 
 ---
 

@@ -152,7 +152,9 @@ export async function returnItem(
   });
 }
 
-export async function getLentItems(ownerId: string): Promise<ReturnType<typeof prisma.borrowRequest.findMany>> {
+export async function getLentItems(
+  ownerId: string,
+): Promise<ReturnType<typeof prisma.borrowRequest.findMany>> {
   return prisma.borrowRequest.findMany({
     where: {
       ownerId,
@@ -166,7 +168,9 @@ export async function getLentItems(ownerId: string): Promise<ReturnType<typeof p
   });
 }
 
-export async function getBorrowedItems(borrowerId: string): Promise<ReturnType<typeof prisma.borrowRequest.findMany>> {
+export async function getBorrowedItems(
+  borrowerId: string,
+): Promise<ReturnType<typeof prisma.borrowRequest.findMany>> {
   return prisma.borrowRequest.findMany({
     where: {
       borrowerId,

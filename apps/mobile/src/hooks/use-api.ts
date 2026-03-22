@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  type UseMutationResult,
+} from '@tanstack/react-query';
 import { api } from '../services/api';
 import { Item, Group, BorrowRequest, Outfit, User } from '@closet/shared';
 
@@ -69,18 +74,20 @@ export function useItem(itemId: string): ReturnType<typeof useQuery> {
   });
 }
 
-export function useCreateItem(): ReturnType<typeof useMutation> {
+type CreateItemVariables = {
+  imageUrl: string;
+  category: string;
+  color: string;
+  season: string;
+  occasion: string;
+  brand?: string;
+  visibility?: string;
+};
+
+export function useCreateItem(): UseMutationResult<Item, unknown, CreateItemVariables, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: {
-      imageUrl: string;
-      category: string;
-      color: string;
-      season: string;
-      occasion: string;
-      brand?: string;
-      visibility?: string;
-    }) => api.post<Item>('/items', data),
+    mutationFn: (data: CreateItemVariables) => api.post<Item>('/items', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.items() });
       queryClient.invalidateQueries({ queryKey: queryKeys.userStats() });
@@ -88,11 +95,12 @@ export function useCreateItem(): ReturnType<typeof useMutation> {
   });
 }
 
-export function useUpdateItem(): ReturnType<typeof useMutation> {
+type UpdateItemVariables = { id: string } & Record<string, unknown>;
+
+export function useUpdateItem(): UseMutationResult<Item, unknown, UpdateItemVariables, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...data }: { id: string } & Record<string, unknown>) =>
-      api.patch<Item>(`/items/${id}`, data),
+    mutationFn: ({ id, ...data }: UpdateItemVariables) => api.patch<Item>(`/items/${id}`, data),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.items() });
       queryClient.invalidateQueries({ queryKey: queryKeys.item(variables.id) });
@@ -100,7 +108,7 @@ export function useUpdateItem(): ReturnType<typeof useMutation> {
   });
 }
 
-export function useDeleteItem(): ReturnType<typeof useMutation> {
+export function useDeleteItem(): UseMutationResult<unknown, unknown, string, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (itemId: string) => api.delete(`/items/${itemId}`),
@@ -128,7 +136,7 @@ export function useGroup(groupId: string): ReturnType<typeof useQuery> {
   });
 }
 
-export function useCreateGroup(): ReturnType<typeof useMutation> {
+export function useCreateGroup(): UseMutationResult<Group, unknown, string, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (name: string) => api.post<Group>('/groups', { name }),
@@ -138,7 +146,7 @@ export function useCreateGroup(): ReturnType<typeof useMutation> {
   });
 }
 
-export function useJoinGroup(): ReturnType<typeof useMutation> {
+export function useJoinGroup(): UseMutationResult<unknown, unknown, string, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (inviteCode: string) => api.post('/groups/join', { inviteCode }),
@@ -164,14 +172,21 @@ export function useBorrowedItems(): ReturnType<typeof useQuery> {
   });
 }
 
-export function useCreateBorrowRequest(): ReturnType<typeof useMutation> {
+type CreateBorrowVariables = {
+  itemId: string;
+  pickupMethod?: string;
+  borrowDurationDays?: number;
+};
+
+export function useCreateBorrowRequest(): UseMutationResult<
+  BorrowRequest,
+  unknown,
+  CreateBorrowVariables,
+  unknown
+> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: {
-      itemId: string;
-      pickupMethod?: string;
-      borrowDurationDays?: number;
-    }) => api.post<BorrowRequest>('/borrow-requests', data),
+    mutationFn: (data: CreateBorrowVariables) => api.post<BorrowRequest>('/borrow-requests', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.borrowRequestsLent() });
       queryClient.invalidateQueries({ queryKey: queryKeys.borrowRequestsBorrowed() });
@@ -179,10 +194,17 @@ export function useCreateBorrowRequest(): ReturnType<typeof useMutation> {
   });
 }
 
-export function useRespondToBorrowRequest(): ReturnType<typeof useMutation> {
+type RespondBorrowVariables = { id: string; status: string };
+
+export function useRespondToBorrowRequest(): UseMutationResult<
+  BorrowRequest,
+  unknown,
+  RespondBorrowVariables,
+  unknown
+> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) =>
+    mutationFn: ({ id, status }: RespondBorrowVariables) =>
       api.patch<BorrowRequest>(`/borrow-requests/${id}`, { status }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.borrowRequestsLent() });
@@ -192,7 +214,7 @@ export function useRespondToBorrowRequest(): ReturnType<typeof useMutation> {
   });
 }
 
-export function useReturnItem(): ReturnType<typeof useMutation> {
+export function useReturnItem(): UseMutationResult<BorrowRequest, unknown, string, unknown> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (requestId: string) =>
@@ -210,16 +232,21 @@ export function useReturnItem(): ReturnType<typeof useMutation> {
 export function useOutfits(type: 'created' | 'received' = 'received'): ReturnType<typeof useQuery> {
   return useQuery({
     queryKey: queryKeys.outfits(type),
-    queryFn: () =>
-      api.get<{ outfits: Outfit[]; total: number }>(`/outfits?type=${type}`),
+    queryFn: () => api.get<{ outfits: Outfit[]; total: number }>(`/outfits?type=${type}`),
   });
 }
 
-export function useCreateOutfit(): ReturnType<typeof useMutation> {
+type CreateOutfitVariables = { styledFor: string; itemIds: string[]; note?: string };
+
+export function useCreateOutfit(): UseMutationResult<
+  Outfit,
+  unknown,
+  CreateOutfitVariables,
+  unknown
+> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { styledFor: string; itemIds: string[]; note?: string }) =>
-      api.post<Outfit>('/outfits', data),
+    mutationFn: (data: CreateOutfitVariables) => api.post<Outfit>('/outfits', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.outfits('created') });
       queryClient.invalidateQueries({ queryKey: queryKeys.outfits('received') });
@@ -249,12 +276,11 @@ export function useFeed(): ReturnType<typeof useQuery> {
 
 // ─── Upload ──────────────────────────────────────────
 
-export function usePresignUpload(): ReturnType<typeof useMutation> {
+type PresignResponse = { uploadUrl: string; publicUrl: string; key: string; expiresIn: number };
+
+export function usePresignUpload(): UseMutationResult<PresignResponse, unknown, string, unknown> {
   return useMutation({
     mutationFn: (contentType: string) =>
-      api.post<{ uploadUrl: string; publicUrl: string; key: string; expiresIn: number }>(
-        '/upload/presign',
-        { contentType },
-      ),
+      api.post<PresignResponse>('/upload/presign', { contentType }),
   });
 }

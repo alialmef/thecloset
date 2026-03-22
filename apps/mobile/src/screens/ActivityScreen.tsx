@@ -26,6 +26,11 @@ import { BorrowRequest, Item } from '@closet/shared';
 
 type Nav = NativeStackNavigationProp<ActivityStackParamList, 'ActivityHome'>;
 
+function alertMutationError(error: unknown): void {
+  const message = error instanceof Error ? error.message : 'Something went wrong';
+  Alert.alert('Error', message);
+}
+
 interface BorrowRequestWithRelations extends BorrowRequest {
   item: Item;
   borrower: { id: string; name: string; avatarUrl: string | null };
@@ -46,23 +51,38 @@ export function ActivityScreen(): React.JSX.Element {
   const isError = lentQuery.isError || borrowedQuery.isError;
 
   if (isLoading) return <LoadingState />;
-  if (isError) return <ErrorState onRetry={() => { lentQuery.refetch(); borrowedQuery.refetch(); }} />;
+  if (isError)
+    return (
+      <ErrorState
+        onRetry={() => {
+          lentQuery.refetch();
+          borrowedQuery.refetch();
+        }}
+      />
+    );
 
-  const sections = [
+  type ActivitySection = { title: string; data: BorrowRequestWithRelations[] };
+  const sections: ActivitySection[] = [
     { title: 'Lent Out', data: lentItems },
     { title: 'Borrowed', data: borrowedItems },
   ].filter((s) => s.data.length > 0);
 
   const handleApprove = (id: string): void => {
-    respondMutation.mutate({ id, status: 'APPROVED' }, {
-      onError: (err: Error) => Alert.alert('Error', err.message),
-    });
+    respondMutation.mutate(
+      { id, status: 'APPROVED' },
+      {
+        onError: alertMutationError,
+      },
+    );
   };
 
   const handleDecline = (id: string): void => {
-    respondMutation.mutate({ id, status: 'DECLINED' }, {
-      onError: (err: Error) => Alert.alert('Error', err.message),
-    });
+    respondMutation.mutate(
+      { id, status: 'DECLINED' },
+      {
+        onError: alertMutationError,
+      },
+    );
   };
 
   const handleReturn = (id: string): void => {
@@ -72,7 +92,7 @@ export function ActivityScreen(): React.JSX.Element {
         text: 'Return',
         onPress: () =>
           returnMutation.mutate(id, {
-            onError: (err: Error) => Alert.alert('Error', err.message),
+            onError: alertMutationError,
           }),
       },
     ]);
@@ -87,7 +107,10 @@ export function ActivityScreen(): React.JSX.Element {
       refreshControl={
         <RefreshControl
           refreshing={lentQuery.isFetching || borrowedQuery.isFetching}
-          onRefresh={() => { lentQuery.refetch(); borrowedQuery.refetch(); }}
+          onRefresh={() => {
+            lentQuery.refetch();
+            borrowedQuery.refetch();
+          }}
           tintColor={colors.primary}
         />
       }
@@ -101,7 +124,9 @@ export function ActivityScreen(): React.JSX.Element {
         >
           <View style={styles.requestHeader}>
             <Avatar
-              uri={section.title === 'Lent Out' ? request.borrower.avatarUrl : request.owner.avatarUrl}
+              uri={
+                section.title === 'Lent Out' ? request.borrower.avatarUrl : request.owner.avatarUrl
+              }
               name={section.title === 'Lent Out' ? request.borrower.name : request.owner.name}
               size={36}
             />
@@ -112,7 +137,8 @@ export function ActivityScreen(): React.JSX.Element {
                   : `Borrowed from ${request.owner.name}`}
               </Text>
               <Text style={styles.requestItem}>
-                {request.item.brand ?? request.item.category} &middot; {request.pickupMethod === 'IN_PERSON' ? 'In Person' : 'Delivery'}
+                {request.item.brand ?? request.item.category} &middot;{' '}
+                {request.pickupMethod === 'IN_PERSON' ? 'In Person' : 'Delivery'}
               </Text>
             </View>
             <StatusBadge status={request.status} />
@@ -122,14 +148,24 @@ export function ActivityScreen(): React.JSX.Element {
           {request.status === 'PENDING' && section.title === 'Lent Out' && (
             <View style={styles.actions}>
               <Button title="Approve" onPress={() => handleApprove(request.id)} size="sm" />
-              <Button title="Decline" onPress={() => handleDecline(request.id)} variant="outline" size="sm" />
+              <Button
+                title="Decline"
+                onPress={() => handleDecline(request.id)}
+                variant="outline"
+                size="sm"
+              />
             </View>
           )}
 
           {(request.status === 'APPROVED' || request.status === 'ACTIVE') &&
             section.title === 'Borrowed' && (
               <View style={styles.actions}>
-                <Button title="Mark Returned" onPress={() => handleReturn(request.id)} variant="secondary" size="sm" />
+                <Button
+                  title="Mark Returned"
+                  onPress={() => handleReturn(request.id)}
+                  variant="secondary"
+                  size="sm"
+                />
               </View>
             )}
         </TouchableOpacity>

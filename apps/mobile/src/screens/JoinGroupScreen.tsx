@@ -22,7 +22,8 @@ export function JoinGroupScreen(): React.JSX.Element {
         Alert.alert('Joined!', 'You are now a member of this group.');
         navigation.goBack();
       },
-      onError: (err: Error) => Alert.alert('Error', err.message),
+      onError: (error: unknown) =>
+        Alert.alert('Error', error instanceof Error ? error.message : 'Something went wrong'),
     });
   };
 

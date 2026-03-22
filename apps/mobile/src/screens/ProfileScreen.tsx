@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  RefreshControl,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ProfileStackParamList } from '../navigation/AppNavigator';
@@ -14,7 +7,6 @@ import { useAuthStore } from '../store/auth-store';
 import { useUserStats, useMyGroups } from '../hooks/use-api';
 import { Avatar } from '../components/Avatar';
 import { Button } from '../components/Button';
-import { LoadingState } from '../components/States';
 import { colors, typography, spacing, radius, shadows } from '../theme';
 import { Group } from '@closet/shared';
 
@@ -26,14 +18,16 @@ export function ProfileScreen(): React.JSX.Element {
   const statsQuery = useUserStats();
   const groupsQuery = useMyGroups();
 
-  const stats = statsQuery.data as {
-    totalItems: number;
-    availableItems: number;
-    lentItems: number;
-    borrowedItems: number;
-    groupCount: number;
-    outfitsCreated: number;
-  } | undefined;
+  const stats = statsQuery.data as
+    | {
+        totalItems: number;
+        availableItems: number;
+        lentItems: number;
+        borrowedItems: number;
+        groupCount: number;
+        outfitsCreated: number;
+      }
+    | undefined;
 
   const groups = (groupsQuery.data ?? []) as Group[];
 
@@ -44,7 +38,10 @@ export function ProfileScreen(): React.JSX.Element {
       refreshControl={
         <RefreshControl
           refreshing={statsQuery.isFetching}
-          onRefresh={() => { statsQuery.refetch(); groupsQuery.refetch(); }}
+          onRefresh={() => {
+            statsQuery.refetch();
+            groupsQuery.refetch();
+          }}
           tintColor={colors.primary}
         />
       }

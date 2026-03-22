@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, ViewStyle } from 'react-native';
-import { colors, typography, radius } from '../theme';
+import { View, Image, Text, StyleSheet, ViewStyle, ImageStyle } from 'react-native';
+import { colors, typography } from '../theme';
 
 interface AvatarProps {
   uri?: string | null;
@@ -24,20 +24,14 @@ export function Avatar({ uri, name, size = 40, style }: AvatarProps): React.JSX.
         style={[
           styles.image,
           { width: size, height: size, borderRadius: size / 2 },
-          style,
+          style as ImageStyle | undefined,
         ]}
       />
     );
   }
 
   return (
-    <View
-      style={[
-        styles.fallback,
-        { width: size, height: size, borderRadius: size / 2 },
-        style,
-      ]}
-    >
+    <View style={[styles.fallback, { width: size, height: size, borderRadius: size / 2 }, style]}>
       <Text style={[styles.initials, { fontSize: size * 0.4 }]}>{initials}</Text>
     </View>
   );

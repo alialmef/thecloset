@@ -31,7 +31,11 @@ export function FriendClosetScreen(): React.JSX.Element {
       keyExtractor={(item) => (item as Item).id}
       columnWrapperStyle={styles.row}
       refreshControl={
-        <RefreshControl refreshing={itemsQuery.isFetching} onRefresh={() => itemsQuery.refetch()} tintColor={colors.primary} />
+        <RefreshControl
+          refreshing={itemsQuery.isFetching}
+          onRefresh={() => itemsQuery.refetch()}
+          tintColor={colors.primary}
+        />
       }
       renderItem={({ item }) => (
         <ItemCard

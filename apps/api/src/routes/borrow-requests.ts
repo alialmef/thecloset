@@ -29,7 +29,7 @@ router.patch(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const request = await borrowService.respondToBorrowRequest(
-        req.params.id,
+        req.params.id!,
         req.user!.id,
         req.body.status,
       );
@@ -46,7 +46,7 @@ router.post(
   authenticate,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const request = await borrowService.returnItem(req.params.id, req.user!.id);
+      const request = await borrowService.returnItem(req.params.id!, req.user!.id);
       res.json({ data: request });
     } catch (err) {
       next(err);
@@ -55,31 +55,23 @@ router.post(
 );
 
 // GET /api/v1/borrow-requests/lent — Items I've lent out ("Who Has My Stuff")
-router.get(
-  '/lent',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const requests = await borrowService.getLentItems(req.user!.id);
-      res.json({ data: requests });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.get('/lent', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const requests = await borrowService.getLentItems(req.user!.id);
+    res.json({ data: requests });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // GET /api/v1/borrow-requests/borrowed — Items I've borrowed
-router.get(
-  '/borrowed',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const requests = await borrowService.getBorrowedItems(req.user!.id);
-      res.json({ data: requests });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.get('/borrowed', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const requests = await borrowService.getBorrowedItems(req.user!.id);
+    res.json({ data: requests });
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;

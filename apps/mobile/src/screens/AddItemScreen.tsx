@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useCreateItem, usePresignUpload } from '../hooks/use-api';
@@ -20,9 +12,9 @@ import {
   ITEM_OCCASIONS_DISPLAY,
 } from '@closet/shared';
 
-const CATEGORIES = Object.entries(ITEM_CATEGORIES_DISPLAY);
-const SEASONS = Object.entries(ITEM_SEASONS_DISPLAY);
-const OCCASIONS = Object.entries(ITEM_OCCASIONS_DISPLAY);
+const CATEGORIES = Object.entries(ITEM_CATEGORIES_DISPLAY) as [string, string][];
+const SEASONS = Object.entries(ITEM_SEASONS_DISPLAY) as [string, string][];
+const OCCASIONS = Object.entries(ITEM_OCCASIONS_DISPLAY) as [string, string][];
 
 export function AddItemScreen(): React.JSX.Element {
   const navigation = useNavigation();
@@ -149,7 +141,12 @@ export function AddItemScreen(): React.JSX.Element {
       <Input label="Color" placeholder="e.g. Navy Blue" value={color} onChangeText={setColor} />
 
       {/* Brand (optional) */}
-      <Input label="Brand (optional)" placeholder="e.g. Nike, Zara" value={brand} onChangeText={setBrand} />
+      <Input
+        label="Brand (optional)"
+        placeholder="e.g. Nike, Zara"
+        value={brand}
+        onChangeText={setBrand}
+      />
 
       {/* Season selector */}
       <Text style={styles.label}>Season</Text>

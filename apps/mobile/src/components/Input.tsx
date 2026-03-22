@@ -18,7 +18,7 @@ export function Input({
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TextInput
-        style={[styles.input, error && styles.inputError]}
+        style={[styles.input, error ? styles.inputError : undefined]}
         placeholderTextColor={colors.gray400}
         {...textInputProps}
       />

@@ -1,7 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticate } from '../middleware/authenticate';
 import { validate } from '../middleware/validate';
-import { createItemSchema, updateItemSchema, itemFilterSchema, paginationSchema } from '@closet/shared';
+import {
+  createItemSchema,
+  updateItemSchema,
+  itemFilterSchema,
+  paginationSchema,
+} from '@closet/shared';
 import * as itemService from '../services/item-service';
 
 const router = Router();
@@ -15,7 +20,7 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page, limit } = paginationSchema.parse(req.query);
-      const result = await itemService.getUserItems(req.params.userId, req.query, page, limit);
+      const result = await itemService.getUserItems(req.params.userId!, req.query, page, limit);
       res.json({ data: result });
     } catch (err) {
       next(err);
@@ -55,18 +60,14 @@ router.get(
 );
 
 // GET /api/v1/items/:id — Get a specific item
-router.get(
-  '/:id',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const item = await itemService.getItemById(req.params.id);
-      res.json({ data: item });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.get('/:id', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const item = await itemService.getItemById(req.params.id!);
+    res.json({ data: item });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // PATCH /api/v1/items/:id — Update an item
 router.patch(
@@ -75,7 +76,7 @@ router.patch(
   validate(updateItemSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const item = await itemService.updateItem(req.params.id, req.user!.id, req.body);
+      const item = await itemService.updateItem(req.params.id!, req.user!.id, req.body);
       res.json({ data: item });
     } catch (err) {
       next(err);
@@ -84,17 +85,13 @@ router.patch(
 );
 
 // DELETE /api/v1/items/:id — Delete an item
-router.delete(
-  '/:id',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await itemService.deleteItem(req.params.id, req.user!.id);
-      res.status(204).send();
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.delete('/:id', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await itemService.deleteItem(req.params.id!, req.user!.id);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;
