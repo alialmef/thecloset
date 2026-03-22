@@ -24,6 +24,9 @@ class ApiClient {
     };
 
     if (this.authToken) {
+      // In dev mode, the API uses x-user-id header
+      // In production, this will be replaced with Bearer token
+      headers['x-user-id'] = this.authToken;
       headers['Authorization'] = `Bearer ${this.authToken}`;
     }
 
@@ -32,6 +35,11 @@ class ApiClient {
       headers,
       body: body ? JSON.stringify(body) : undefined,
     });
+
+    // Handle 204 No Content (e.g., DELETE responses)
+    if (response.status === 204) {
+      return undefined as T;
+    }
 
     const json = (await response.json()) as ApiResponse<T>;
 

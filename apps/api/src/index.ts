@@ -4,10 +4,13 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { errorHandler } from './middleware/error-handler';
 import healthRoutes from './routes/health';
+import userRoutes from './routes/users';
 import groupRoutes from './routes/groups';
 import itemRoutes from './routes/items';
 import borrowRequestRoutes from './routes/borrow-requests';
 import outfitRoutes from './routes/outfits';
+import feedRoutes from './routes/feed';
+import uploadRoutes from './routes/upload';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -22,10 +25,13 @@ app.use(morgan('dev'));
 // ─── Routes ─────────────────────────────────────────
 
 app.use('/api/v1/health', healthRoutes);
+app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/groups', groupRoutes);
 app.use('/api/v1/items', itemRoutes);
 app.use('/api/v1/borrow-requests', borrowRequestRoutes);
 app.use('/api/v1/outfits', outfitRoutes);
+app.use('/api/v1/feed', feedRoutes);
+app.use('/api/v1/upload', uploadRoutes);
 
 // ─── Error Handler (must be last) ───────────────────
 
