@@ -37,31 +37,23 @@ router.post(
 );
 
 // GET /api/v1/groups — List user's groups
-router.get(
-  '/',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const groups = await groupService.getUserGroups(req.user!.id);
-      res.json({ data: groups });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.get('/', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const groups = await groupService.getUserGroups(req.user!.id);
+    res.json({ data: groups });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // GET /api/v1/groups/:id — Get a specific group
-router.get(
-  '/:id',
-  authenticate,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const group = await groupService.getGroupById(req.params.id, req.user!.id);
-      res.json({ data: group });
-    } catch (err) {
-      next(err);
-    }
-  },
-);
+router.get('/:id', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const group = await groupService.getGroupById(req.params.id!, req.user!.id);
+    res.json({ data: group });
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;

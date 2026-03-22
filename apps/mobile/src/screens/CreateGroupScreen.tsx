@@ -19,7 +19,8 @@ export function CreateGroupScreen(): React.JSX.Element {
         Alert.alert('Group Created!', 'Share the invite code with your friends.');
         navigation.goBack();
       },
-      onError: (err: Error) => Alert.alert('Error', err.message),
+      onError: (error: unknown) =>
+        Alert.alert('Error', error instanceof Error ? error.message : 'Something went wrong'),
     });
   };
 

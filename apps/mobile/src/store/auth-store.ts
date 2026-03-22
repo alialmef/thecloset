@@ -27,10 +27,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     api.setAuthToken(userId);
 
     // Persist to storage
-    AsyncStorage.setItem(
-      AUTH_STORAGE_KEY,
-      JSON.stringify({ userId, userName, userPhone }),
-    );
+    AsyncStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ userId, userName, userPhone }));
 
     set({ userId, userName, userPhone, isAuthenticated: true, isLoading: false });
   },

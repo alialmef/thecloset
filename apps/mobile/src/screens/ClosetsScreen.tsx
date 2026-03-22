@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  RefreshControl,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ClosetsStackParamList } from '../navigation/AppNavigator';
@@ -30,7 +23,12 @@ export function ClosetsScreen(): React.JSX.Element {
   // Collect unique group members for friend browsing
   const friends: Array<{ id: string; name: string; avatarUrl: string | null }> = [];
   for (const group of groups) {
-    const members = (group as Group & { members?: Array<{ user: { id: string; name: string; avatarUrl: string | null } }> }).members ?? [];
+    const members =
+      (
+        group as Group & {
+          members?: Array<{ user: { id: string; name: string; avatarUrl: string | null } }>;
+        }
+      ).members ?? [];
     for (const member of members) {
       if (!friends.find((f) => f.id === member.user.id)) {
         friends.push(member.user);

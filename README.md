@@ -62,16 +62,16 @@ thecloset/
 
 ### Scripts
 
-| Command | Description |
-|---------|------------|
-| `npm run dev:api` | Start API server (dev) |
-| `npm run dev:mobile` | Start Expo mobile app |
-| `npm test` | Run all tests |
-| `npm run lint` | Lint all code |
-| `npm run format` | Format all code |
-| `npm run typecheck` | Type-check all code |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:seed` | Seed database with test data |
+| Command              | Description                  |
+| -------------------- | ---------------------------- |
+| `npm run dev:api`    | Start API server (dev)       |
+| `npm run dev:mobile` | Start Expo mobile app        |
+| `npm test`           | Run all tests                |
+| `npm run lint`       | Lint all code                |
+| `npm run format`     | Format all code              |
+| `npm run typecheck`  | Type-check all code          |
+| `npm run db:migrate` | Run database migrations      |
+| `npm run db:seed`    | Seed database with test data |
 
 ---
 
@@ -133,13 +133,13 @@ thecloset/
 
 ### Scripts
 
-| Commande | Description |
-|---------|------------|
-| `npm run dev:api` | Démarrer le serveur API (dev) |
-| `npm run dev:mobile` | Démarrer l’app mobile Expo |
-| `npm test` | Lancer tous les tests |
-| `npm run lint` | Linter tout le code |
-| `npm run format` | Formater tout le code |
-| `npm run typecheck` | Vérifier les types sur tout le code |
+| Commande             | Description                                |
+| -------------------- | ------------------------------------------ |
+| `npm run dev:api`    | Démarrer le serveur API (dev)              |
+| `npm run dev:mobile` | Démarrer l’app mobile Expo                 |
+| `npm test`           | Lancer tous les tests                      |
+| `npm run lint`       | Linter tout le code                        |
+| `npm run format`     | Formater tout le code                      |
+| `npm run typecheck`  | Vérifier les types sur tout le code        |
 | `npm run db:migrate` | Exécuter les migrations de base de données |
-| `npm run db:seed` | Remplir la base avec des données de test |
+| `npm run db:seed`    | Remplir la base avec des données de test   |

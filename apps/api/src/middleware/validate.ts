@@ -11,9 +11,7 @@ export function validate(schema: ZodSchema, target: ValidationTarget = 'body') {
       next();
     } catch (err) {
       if (err instanceof ZodError) {
-        const message = err.errors
-          .map((e) => `${e.path.join('.')}: ${e.message}`)
-          .join(', ');
+        const message = err.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
 
         _res.status(400).json({
           error: {

@@ -4,8 +4,6 @@ import { useFeed } from '../hooks/use-api';
 import { Avatar } from '../components/Avatar';
 import { LoadingState, EmptyState, ErrorState } from '../components/States';
 import { colors, typography, spacing, radius, shadows } from '../theme';
-import { Item } from '@closet/shared';
-
 interface FeedItem {
   id: string;
   type: string;
@@ -51,7 +49,6 @@ export function HomeScreen(): React.JSX.Element {
 
 function FeedCard({ item }: { item: FeedItem }): React.JSX.Element {
   const recipientName = item.data.recipient?.name ?? 'themselves';
-  const itemCount = item.data.items?.length ?? 0;
 
   return (
     <View style={[styles.card, shadows.sm]}>
@@ -59,9 +56,7 @@ function FeedCard({ item }: { item: FeedItem }): React.JSX.Element {
         <Avatar uri={item.actor.avatarUrl} name={item.actor.name} size={36} />
         <View style={styles.cardHeaderText}>
           <Text style={styles.actorName}>{item.actor.name}</Text>
-          <Text style={styles.cardAction}>
-            styled an outfit for {recipientName}
-          </Text>
+          <Text style={styles.cardAction}>styled an outfit for {recipientName}</Text>
         </View>
       </View>
 
@@ -71,17 +66,13 @@ function FeedCard({ item }: { item: FeedItem }): React.JSX.Element {
         <View style={styles.itemPills}>
           {item.data.items.map((piece) => (
             <View key={piece.id} style={styles.itemPill}>
-              <Text style={styles.itemPillText}>
-                {piece.brand ?? piece.category}
-              </Text>
+              <Text style={styles.itemPillText}>{piece.brand ?? piece.category}</Text>
             </View>
           ))}
         </View>
       )}
 
-      <Text style={styles.timestamp}>
-        {new Date(item.createdAt).toLocaleDateString()}
-      </Text>
+      <Text style={styles.timestamp}>{new Date(item.createdAt).toLocaleDateString()}</Text>
     </View>
   );
 }

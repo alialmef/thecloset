@@ -69,16 +69,8 @@ export function ItemCardLarge({
   onPress,
 }: ItemCardLargeProps): React.JSX.Element {
   return (
-    <TouchableOpacity
-      style={[styles.cardLarge, shadows.md]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      <Image
-        source={{ uri: imageUrl }}
-        style={styles.imageLarge}
-        resizeMode="cover"
-      />
+    <TouchableOpacity style={[styles.cardLarge, shadows.md]} onPress={onPress} activeOpacity={0.8}>
+      <Image source={{ uri: imageUrl }} style={styles.imageLarge} resizeMode="cover" />
       <View style={styles.infoLarge}>
         <View>
           <Text style={styles.brandLarge}>{brand ?? category}</Text>

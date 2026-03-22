@@ -41,11 +41,11 @@
 
 This is an npm workspaces monorepo with three packages:
 
-| Package | Purpose | Dependencies |
-|---------|---------|-------------|
-| `packages/shared` | Types, constants, Zod validation schemas | zod |
-| `apps/api` | Express backend, Prisma ORM, business logic | shared, prisma, express |
-| `apps/mobile` | React Native (Expo) mobile app | shared, react-native, expo |
+| Package           | Purpose                                     | Dependencies               |
+| ----------------- | ------------------------------------------- | -------------------------- |
+| `packages/shared` | Types, constants, Zod validation schemas    | zod                        |
+| `apps/api`        | Express backend, Prisma ORM, business logic | shared, prisma, express    |
+| `apps/mobile`     | React Native (Expo) mobile app              | shared, react-native, expo |
 
 `shared` is the dependency root — both `api` and `mobile` depend on it. There are no circular dependencies.
 
@@ -78,6 +78,7 @@ apps/api/src/
 PostgreSQL via Prisma ORM. Schema lives at `apps/api/prisma/schema.prisma`.
 
 Key design decisions:
+
 - **UUIDs** for all primary keys (no auto-increment integers exposed to clients)
 - **snake_case** column names in the DB, **camelCase** in TypeScript (Prisma `@map` handles this)
 - **Composite primary keys** for junction tables (`GroupMembership`, `OutfitItem`, `ItemGroupVisibility`)
@@ -87,22 +88,22 @@ Key design decisions:
 
 ### State Management
 
-| Layer | Tool | Purpose |
-|-------|------|---------|
+| Layer        | Tool                         | Purpose                                  |
+| ------------ | ---------------------------- | ---------------------------------------- |
 | Server state | React Query (TanStack Query) | API data fetching, caching, invalidation |
-| Client state | Zustand | Auth state, UI state, draft outfits |
+| Client state | Zustand                      | Auth state, UI state, draft outfits      |
 
 ### Navigation
 
 Bottom tab navigator with 5 tabs matching the PRD information architecture:
 
-| Tab | Screen | Purpose |
-|-----|--------|---------|
-| Home | `HomeScreen` | Social feed |
-| Closets | `ClosetsScreen` | Browse closets |
-| Style | `StyleScreen` | Outfit builder |
+| Tab      | Screen           | Purpose                         |
+| -------- | ---------------- | ------------------------------- |
+| Home     | `HomeScreen`     | Social feed                     |
+| Closets  | `ClosetsScreen`  | Browse closets                  |
+| Style    | `StyleScreen`    | Outfit builder                  |
 | Activity | `ActivityScreen` | Borrow requests & notifications |
-| Profile | `ProfileScreen` | User settings & stats |
+| Profile  | `ProfileScreen`  | User settings & stats           |
 
 ### API Communication
 

@@ -7,8 +7,8 @@ export function StyleScreen(): React.JSX.Element {
     <View style={styles.container}>
       <Text style={styles.title}>Outfit Builder</Text>
       <Text style={styles.subtitle}>
-        Select a friend, browse their closet, and drag pieces into the outfit slots to create
-        the perfect look.
+        Select a friend, browse their closet, and drag pieces into the outfit slots to create the
+        perfect look.
       </Text>
       <View style={styles.slots}>
         <SlotPlaceholder label="Top" />

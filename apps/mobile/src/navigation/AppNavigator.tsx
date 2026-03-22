@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -81,14 +81,10 @@ function AuthNavigator(): React.JSX.Element {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name="Welcome">
-        {({ navigation }) => (
-          <WelcomeScreen onGetStarted={() => navigation.navigate('SignUp')} />
-        )}
+        {({ navigation }) => <WelcomeScreen onGetStarted={() => navigation.navigate('SignUp')} />}
       </AuthStack.Screen>
       <AuthStack.Screen name="SignUp">
-        {({ navigation }) => (
-          <SignUpScreen onBack={() => navigation.goBack()} />
-        )}
+        {({ navigation }) => <SignUpScreen onBack={() => navigation.goBack()} />}
       </AuthStack.Screen>
     </AuthStack.Navigator>
   );
@@ -100,7 +96,11 @@ function HomeStackNavigator(): React.JSX.Element {
   return (
     <HomeStack.Navigator screenOptions={stackScreenOptions}>
       <HomeStack.Screen name="HomeFeed" component={HomeScreen} options={{ title: 'Home' }} />
-      <HomeStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item' }} />
+      <HomeStack.Screen
+        name="ItemDetail"
+        component={ItemDetailScreen}
+        options={{ title: 'Item' }}
+      />
     </HomeStack.Navigator>
   );
 }
@@ -108,10 +108,26 @@ function HomeStackNavigator(): React.JSX.Element {
 function ClosetsStackNavigator(): React.JSX.Element {
   return (
     <ClosetsStack.Navigator screenOptions={stackScreenOptions}>
-      <ClosetsStack.Screen name="ClosetsHome" component={ClosetsScreen} options={{ title: 'My Closet' }} />
-      <ClosetsStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item' }} />
-      <ClosetsStack.Screen name="AddItem" component={AddItemScreen} options={{ title: 'Add Item' }} />
-      <ClosetsStack.Screen name="FriendCloset" component={FriendClosetScreen} options={({ route }) => ({ title: `${route.params.userName}'s Closet` })} />
+      <ClosetsStack.Screen
+        name="ClosetsHome"
+        component={ClosetsScreen}
+        options={{ title: 'My Closet' }}
+      />
+      <ClosetsStack.Screen
+        name="ItemDetail"
+        component={ItemDetailScreen}
+        options={{ title: 'Item' }}
+      />
+      <ClosetsStack.Screen
+        name="AddItem"
+        component={AddItemScreen}
+        options={{ title: 'Add Item' }}
+      />
+      <ClosetsStack.Screen
+        name="FriendCloset"
+        component={FriendClosetScreen}
+        options={({ route }) => ({ title: `${route.params.userName}'s Closet` })}
+      />
     </ClosetsStack.Navigator>
   );
 }
@@ -119,8 +135,16 @@ function ClosetsStackNavigator(): React.JSX.Element {
 function ActivityStackNavigator(): React.JSX.Element {
   return (
     <ActivityStack.Navigator screenOptions={stackScreenOptions}>
-      <ActivityStack.Screen name="ActivityHome" component={ActivityScreen} options={{ title: 'Activity' }} />
-      <ActivityStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item' }} />
+      <ActivityStack.Screen
+        name="ActivityHome"
+        component={ActivityScreen}
+        options={{ title: 'Activity' }}
+      />
+      <ActivityStack.Screen
+        name="ItemDetail"
+        component={ItemDetailScreen}
+        options={{ title: 'Item' }}
+      />
     </ActivityStack.Navigator>
   );
 }
@@ -128,11 +152,31 @@ function ActivityStackNavigator(): React.JSX.Element {
 function ProfileStackNavigator(): React.JSX.Element {
   return (
     <ProfileStack.Navigator screenOptions={stackScreenOptions}>
-      <ProfileStack.Screen name="ProfileHome" component={ProfileScreen} options={{ title: 'Profile' }} />
-      <ProfileStack.Screen name="GroupDetail" component={GroupDetailScreen} options={{ title: 'Group' }} />
-      <ProfileStack.Screen name="CreateGroup" component={CreateGroupScreen} options={{ title: 'Create Group' }} />
-      <ProfileStack.Screen name="JoinGroup" component={JoinGroupScreen} options={{ title: 'Join Group' }} />
-      <ProfileStack.Screen name="ItemDetail" component={ItemDetailScreen} options={{ title: 'Item' }} />
+      <ProfileStack.Screen
+        name="ProfileHome"
+        component={ProfileScreen}
+        options={{ title: 'Profile' }}
+      />
+      <ProfileStack.Screen
+        name="GroupDetail"
+        component={GroupDetailScreen}
+        options={{ title: 'Group' }}
+      />
+      <ProfileStack.Screen
+        name="CreateGroup"
+        component={CreateGroupScreen}
+        options={{ title: 'Create Group' }}
+      />
+      <ProfileStack.Screen
+        name="JoinGroup"
+        component={JoinGroupScreen}
+        options={{ title: 'Join Group' }}
+      />
+      <ProfileStack.Screen
+        name="ItemDetail"
+        component={ItemDetailScreen}
+        options={{ title: 'Item' }}
+      />
     </ProfileStack.Navigator>
   );
 }

@@ -54,6 +54,7 @@ This is a monorepo using npm workspaces:
 2. **Make your changes** following the conventions in `CLAUDE.md`.
 
 3. **Run checks before pushing**:
+
    ```bash
    npm run lint          # Lint check (must pass with 0 warnings)
    npm run format:check  # Format check

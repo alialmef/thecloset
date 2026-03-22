@@ -30,7 +30,13 @@ export function EmptyState({
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.emptyMessage}>{message}</Text>
       {actionLabel && onAction && (
-        <Button title={actionLabel} onPress={onAction} variant="outline" size="sm" style={styles.action} />
+        <Button
+          title={actionLabel}
+          onPress={onAction}
+          variant="outline"
+          size="sm"
+          style={styles.action}
+        />
       )}
     </View>
   );
@@ -50,7 +56,13 @@ export function ErrorState({
       <Text style={styles.title}>Oops</Text>
       <Text style={styles.emptyMessage}>{message}</Text>
       {onRetry && (
-        <Button title="Try Again" onPress={onRetry} variant="outline" size="sm" style={styles.action} />
+        <Button
+          title="Try Again"
+          onPress={onRetry}
+          variant="outline"
+          size="sm"
+          style={styles.action}
+        />
       )}
     </View>
   );

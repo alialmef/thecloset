@@ -4,13 +4,10 @@
     "jsx": "react-native",
     "lib": ["ES2022", "DOM"],
     "moduleResolution": "bundler",
-    "types": ["react-native", "jest"],
+    "types": ["react-native", "jest", "node"],
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["src", "App.tsx"],
-  "references": [
-    { "path": "../../packages/shared" }
-  ]
+  "include": ["src", "App.tsx"]
 }

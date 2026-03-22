@@ -8,17 +8,17 @@ Closet is a mobile-first app for friend groups to share, borrow, and style outfi
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Mobile | React Native (Expo) + TypeScript |
-| Backend | Node.js / Express + TypeScript |
-| Database | PostgreSQL with Prisma ORM |
-| Image Storage | AWS S3 / Cloudflare R2 with CDN |
-| AI Services | Vision API (GPT-4o / Claude Vision) for auto-tagging |
-| Delivery | Uber Direct API / DoorDash Drive API |
-| Auth | Phone OTP + Apple/Google SSO (via Firebase Auth) |
-| Notifications | Firebase Cloud Messaging (FCM) + APNs |
-| Real-time | WebSockets (Socket.io) |
+| Layer         | Technology                                           |
+| ------------- | ---------------------------------------------------- |
+| Mobile        | React Native (Expo) + TypeScript                     |
+| Backend       | Node.js / Express + TypeScript                       |
+| Database      | PostgreSQL with Prisma ORM                           |
+| Image Storage | AWS S3 / Cloudflare R2 with CDN                      |
+| AI Services   | Vision API (GPT-4o / Claude Vision) for auto-tagging |
+| Delivery      | Uber Direct API / DoorDash Drive API                 |
+| Auth          | Phone OTP + Apple/Google SSO (via Firebase Auth)     |
+| Notifications | Firebase Cloud Messaging (FCM) + APNs                |
+| Real-time     | WebSockets (Socket.io)                               |
 
 ## Repo Structure
 
